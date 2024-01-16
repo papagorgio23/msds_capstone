@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "msds_capstone"
+version = "0.1.0"
+description = "Northwestern MSDS capstone project"
+authors = ["papagorgio23 <jason@aisportsfirm.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pandas = "^2.1.4"
+scikit-learn = "^1.3.2"
+
+[tool.poetry.dev-dependencies]
+ipykernel = "^6.28.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
