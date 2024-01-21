@@ -30,22 +30,23 @@ st.set_page_config(
 )
 
 
-@st.cache(allow_output_mutation=True)
+@st.cache_data
 def get_data():
-    df = pd.read_csv("app/data/public_comments_133.csv")
+    df = pd.read_csv("./data/public_comments_133.csv")
     return df
 
 
-@st.cache(allow_output_mutation=True)
+@st.cache_data
 def get_full_data():
-    df = pd.read_csv("app/data/df_full_wo_emotion.csv")
+    # df = pd.read_csv("./data/df_full_wo_emotion.csv")
+    df = pd.read_csv("./data/public_comments_133.csv")
     # clean comments
     # df["clean_comment"] = df["comment"].apply(nlp_clean)
     # df["job"] = df["clean_comment"].apply(get_job)
     return df
 
 
-@st.cache
+@st.cache_data
 def get_cosine_sim(df_full):
     vectorizer = TfidfVectorizer()
     tfidf_matrix = vectorizer.fit_transform(df_full["clean_comment"])
@@ -71,7 +72,7 @@ df_full = copy.deepcopy(get_full_data())
 cosine_sim = copy.deepcopy(get_cosine_sim(df_full))
 
 #### SIDE BAR STUFF --------------------------------------------------------------
-LOGO = "app/logo.jpg"
+LOGO = "./img/logo.png"
 st.sidebar.image(LOGO, use_column_width=True)
 st.sidebar.text("Jason Lee\nSr. Data Scientist")
 
@@ -94,31 +95,44 @@ limit = st.sidebar.number_input(
     key="threshold",
 )
 
+st.sidebar.markdown(
+    """
+
+**CART** is a tool for analyzing comments from the [Public Comments](https://www.regulations.gov/docket/VA-2020-VHA-0024/comments) form.
+"""
+)
+
 
 # init vader
 # sentiment_clf = SentimentIntensityAnalyzer()
 # emotion_clf = load_emotion()
 
 
-st.title("CART")
-st.subheader("Comment Analysis Reporting Tool")
+st.title("ACSA")
+st.subheader(
+    "Automated Comment Similarity Analysis for Streamlining Regulatory Review Processes"
+)
 
 st.markdown(
     """
-
-**CART** is a tool for analyzing comments from the [Public Comments](https://www.regulations.gov/docket/VA-2020-VHA-0024/comments) form.
-
-##### Steps CART takes:  
-1. Scrapes all comments
-2. Cleans the comment text
-3. Extracts commentors profession
-4. Performs sentiment analysis
-5. Performs emotion analysis
-6. Calculates the similarity score of each comment
+### Summary of Regulation:  
+The VA is stating that its healthcare professionals can practice within VA guidelines, regardless of state requirements. This includes providing services in states where they aren't licensed, aiming to improve access to VA healthcare. The rule also emphasizes VA's authority to set national practice standards for uniformity across its medical facilities.
 
 
-##### RAW DATA EXAMPLE:
+### Comment Statistics:
 """
+)
+
+
+# create several columns to display multiple metrics
+a1, a2, a3, a4, a5 = st.columns(5)
+a1.metric(label="Comments", value=len(df))
+a2.metric(label="Unique Comments", value=df["comment"].nunique())
+a3.metric(label="Unique Commentors", value=df["attributes_agency_id"].nunique())
+a4.metric(label="Unique Jobs", value=df["job"].nunique())
+# average sentiment score
+a5.metric(
+    label="Average Sentiment Score", value=np.round(df["sentiment_TEXTBLOB"].mean(), 2)
 )
 
 
@@ -157,7 +171,7 @@ job_chart = (
         ),
         x=alt.X("count(job)", title="Count"),
         # color=alt.Color("job", legend=None, scale=alt.Scale(scheme="Blues")),
-        color=alt.Color("job:N", legend=None, scale=alt.Scale(scheme="Dark2")),
+        color=alt.Color("job:N", legend=None, scale=alt.Scale(scheme="blues")),
         tooltip=["job", "count(job)"],
     )
     .interactive()
@@ -292,9 +306,10 @@ sim_comments = sim_comments.drop(
         "attributes_posted_date",
         "links_self",
         "comment",
-        "sentiment_VADER",
-        "sentiment_FLAIR_label",
-        "sentiment_FLAIR_score",
+        "sentiment_TEXTBLOB",
+        # "sentiment_VADER",
+        # "sentiment_FLAIR_label",
+        # "sentiment_FLAIR_score",
     ]
 )
 
