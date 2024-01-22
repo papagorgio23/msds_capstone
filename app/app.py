@@ -38,8 +38,8 @@ def get_data():
 
 @st.cache_data
 def get_full_data():
-    # df = pd.read_csv("./data/df_full_wo_emotion.csv")
-    df = pd.read_csv("./data/public_comments_133.csv")
+    df = pd.read_csv("./data/df_full_wo_emotion.csv")
+    # df = pd.read_csv("./data/public_comments_133.csv")
     # clean comments
     # df["clean_comment"] = df["comment"].apply(nlp_clean)
     # df["job"] = df["clean_comment"].apply(get_job)
@@ -126,13 +126,14 @@ The VA is stating that its healthcare professionals can practice within VA guide
 
 # create several columns to display multiple metrics
 a1, a2, a3, a4, a5 = st.columns(5)
-a1.metric(label="Comments", value=len(df))
-a2.metric(label="Unique Comments", value=df["comment"].nunique())
-a3.metric(label="Unique Commentors", value=df["attributes_agency_id"].nunique())
-a4.metric(label="Unique Jobs", value=df["job"].nunique())
+a1.metric(label="Comments", value=len(df_full))
+a2.metric(label="Unique Comments", value=df_full["comment"].nunique())
+a3.metric(label="Unique Commentors", value=df_full["attributes_agency_id"].nunique())
+a4.metric(label="Unique Jobs", value=df_full["job"].nunique())
 # average sentiment score
 a5.metric(
-    label="Average Sentiment Score", value=np.round(df["sentiment_TEXTBLOB"].mean(), 2)
+    label="Average Sentiment Score",
+    value=np.round(df_full["sentiment_TEXTBLOB"].mean(), 2),
 )
 
 
@@ -147,7 +148,6 @@ a5.metric(
 # df["sentiment_TEXTBLOB"] = df["clean_comment"].apply(textblob_prediction)
 
 # df = get_emotion(df, emotion_clf)
-st.dataframe(df)
 
 df_test = df
 import altair as alt
