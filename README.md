@@ -10,4 +10,4 @@ An example post is here: https://www.regulations.gov/comment/VA-2020-VHA-0024-91
 
 The list of all comments is found here: https://www.regulations.gov/docket/VA-2020-VHA-0024/comments
 
-There are 13,324 comments on this proposed regulation.
+There are 13,324 comments on this proposed regulation. 
