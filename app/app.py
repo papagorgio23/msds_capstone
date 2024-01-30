@@ -103,11 +103,6 @@ st.sidebar.markdown(
 )
 
 
-# init vader
-# sentiment_clf = SentimentIntensityAnalyzer()
-# emotion_clf = load_emotion()
-
-
 st.title("ACSA")
 st.subheader(
     "Automated Comment Similarity Analysis for Streamlining Regulatory Review Processes"
@@ -136,18 +131,6 @@ a5.metric(
     value=np.round(df_full["sentiment_TEXTBLOB"].mean(), 2),
 )
 
-
-# df["clean_comment"] = df["comment"].apply(nlp_clean)
-
-# df["job"] = df["clean_comment"].apply(get_job)
-# df["sentiment"] = df["clean_comment"].apply(
-#    lambda x: sentiment_clf.polarity_scores(x)["compound"]
-# )
-
-# TEXTBLOB sentiment score
-# df["sentiment_TEXTBLOB"] = df["clean_comment"].apply(textblob_prediction)
-
-# df = get_emotion(df, emotion_clf)
 
 df_test = df
 import altair as alt
