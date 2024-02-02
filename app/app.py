@@ -8,6 +8,7 @@ import streamlit as st
 # from textblob import TextBlob
 
 # from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+# this isn't needed
 
 
 # from src.classifier.emotion import get_emotion, load_emotion
