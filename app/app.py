@@ -11,10 +11,6 @@ import streamlit as st
 # this isn't needed
 
 
-# from src.classifier.emotion import get_emotion, load_emotion
-# from src.utils.clean_comments import get_job, nlp_clean
-
-
 def pretty(s: str) -> str:
     try:
         return dict(js="JavaScript")[s]
