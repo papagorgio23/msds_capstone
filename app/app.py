@@ -299,3 +299,5 @@ st.altair_chart(joy_chart, use_container_width=True)
 st.altair_chart(sadness_chart, use_container_width=True)
 st.altair_chart(surprise_chart, use_container_width=True)
 st.altair_chart(neutral_chart, use_container_width=True)
+
+st.markdown("---")
