@@ -134,6 +134,67 @@ import altair as alt
 
 st.markdown("---")
 
+
+# TEXT SIMILARITY
+# clean comments
+# df_full["clean_comment"] = df_full["comment"].apply(nlp_clean)
+# vectorizer = TfidfVectorizer()
+# tfidf_matrix = vectorizer.fit_transform(df_full["clean_comment"])
+# cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
+
+
+sim_comments = get_similar_comments(
+    index=number,
+    df=df_full,
+    cosine_sim=cosine_sim,
+    threshold=limit,
+)
+
+
+st.markdown(
+    f"""
+### Similar Comments
+
+
+##### Selected Comment:
+{df_full["clean_comment"][number]}
+
+##### **Number of similar comments found: {len(sim_comments)}  ~  {round((len(sim_comments) / len(df_full) * 100), 1)}% of the comments**
+
+"""
+)
+
+
+# drop the columns we don't need
+sim_comments = sim_comments.drop(
+    columns=[
+        "type",
+        "attributes_document_type",
+        "attributes_last_modified_date",
+        "attributes_highlighted_content",
+        "attributes_withdrawn",
+        "attributes_agency_id",
+        "attributes_title",
+        "attributes_object_id",
+        "attributes_posted_date",
+        "links_self",
+        "comment",
+        "sentiment_TEXTBLOB",
+        # "sentiment_VADER",
+        # "sentiment_FLAIR_label",
+        # "sentiment_FLAIR_score",
+    ]
+)
+
+
+st.info("Click the box below to view all similar comments")
+view_data = st.checkbox("View dataset", value=False)
+if view_data:
+    st.dataframe(sim_comments)
+
+
+st.markdown("---")
+
 st.markdown(
     """
 ### Profession Extraction
@@ -238,63 +299,3 @@ st.altair_chart(joy_chart, use_container_width=True)
 st.altair_chart(sadness_chart, use_container_width=True)
 st.altair_chart(surprise_chart, use_container_width=True)
 st.altair_chart(neutral_chart, use_container_width=True)
-
-
-st.markdown("---")
-
-# TEXT SIMILARITY
-# clean comments
-# df_full["clean_comment"] = df_full["comment"].apply(nlp_clean)
-# vectorizer = TfidfVectorizer()
-# tfidf_matrix = vectorizer.fit_transform(df_full["clean_comment"])
-# cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
-
-
-sim_comments = get_similar_comments(
-    index=number,
-    df=df_full,
-    cosine_sim=cosine_sim,
-    threshold=limit,
-)
-
-
-st.markdown(
-    f"""
-### Similar Comments
-
-
-##### Selected Comment:
-{df_full["clean_comment"][number]}
-
-##### **Number of similar comments found: {len(sim_comments)}  ~  {round((len(sim_comments) / len(df_full) * 100), 1)}% of the comments**
-
-"""
-)
-
-
-# drop the columns we don't need
-sim_comments = sim_comments.drop(
-    columns=[
-        "type",
-        "attributes_document_type",
-        "attributes_last_modified_date",
-        "attributes_highlighted_content",
-        "attributes_withdrawn",
-        "attributes_agency_id",
-        "attributes_title",
-        "attributes_object_id",
-        "attributes_posted_date",
-        "links_self",
-        "comment",
-        "sentiment_TEXTBLOB",
-        # "sentiment_VADER",
-        # "sentiment_FLAIR_label",
-        # "sentiment_FLAIR_score",
-    ]
-)
-
-
-st.info("Click the box below to view all similar comments")
-view_data = st.checkbox("View dataset", value=False)
-if view_data:
-    st.dataframe(sim_comments)
