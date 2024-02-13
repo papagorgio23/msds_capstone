@@ -68,6 +68,9 @@ df = get_data()
 df_full = copy.deepcopy(get_full_data())
 cosine_sim = copy.deepcopy(get_cosine_sim(df_full))
 
+# convert the date to a datetime object
+df_full["attributes_posted_date"] = pd.to_datetime(df_full["attributes_posted_date"])
+
 #### SIDE BAR STUFF --------------------------------------------------------------
 LOGO = "./img/logo.png"
 st.sidebar.image(LOGO, use_column_width=True)
@@ -115,12 +118,19 @@ The VA is stating that its healthcare professionals can practice within VA guide
 """
 )
 
+# return how many days difference between the first and last comment
+comment_period = (
+    df_full["attributes_posted_date"].max() - df_full["attributes_posted_date"].min()
+)
+# just the number of days
+comment_period = f"{comment_period.days} days"
+
 
 # create several columns to display multiple metrics
 a1, a2, a3, a4, a5 = st.columns(5)
 a1.metric(label="Comments", value=len(df_full))
 a2.metric(label="Unique Comments", value=df_full["comment"].nunique())
-a3.metric(label="Unique Commentors", value=df_full["attributes_agency_id"].nunique())
+a3.metric(label="Comment Period", value=comment_period)
 a4.metric(label="Unique Jobs", value=df_full["job"].nunique())
 # average sentiment score
 a5.metric(
