@@ -1,6 +1,7 @@
 import copy
 import pandas as pd
 import numpy as np
+import time
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import streamlit as st
@@ -64,6 +65,46 @@ def get_similar_comments(
     return new_df
 
 
+@st.cache_data
+def group_similar_comments(df, threshold):
+    # start timer
+    start = time.time()
+
+    vectorizer = TfidfVectorizer()
+    i = 1
+    all_df = pd.DataFrame()
+    print("Performing TF-IDF")
+    df = df.reset_index(drop=True)
+    tfidf_matrix = vectorizer.fit_transform(df["clean_comment"])
+    print("TF-IDF done")
+    print("Performing cosine similarity")
+    cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
+    print("Cosine similarity done")
+    while len(df) > 0:
+        cosine_sim_df = pd.DataFrame(
+            cosine_sim[df.index[0]].tolist(), columns=["Similar_Score"]
+        )
+        df = df.join(cosine_sim_df)
+
+        temp_df = df.loc[df["Similar_Score"] > threshold,]
+        temp_df = temp_df[["id", "clean_comment"]]
+        temp_df["Unique_Comment_ID"] = i
+        print("Similar Comments: ", len(temp_df))
+        all_df = pd.concat([all_df, temp_df], ignore_index=True)
+
+        # remove rows from df that are in new_df
+        df = df[~df["id"].isin(temp_df["id"])]
+        # remove Similar_Score column
+        df = df.drop(columns=["Similar_Score"])
+        i += 1
+        if len(temp_df) == 0:
+            print("No more similar comments")
+            break
+
+    time_elapsed = time.time() - start
+    return all_df, cosine_sim_df, df, time_elapsed
+
+
 df = get_data()
 df_full = copy.deepcopy(get_full_data())
 cosine_sim = copy.deepcopy(get_cosine_sim(df_full))
@@ -72,7 +113,7 @@ cosine_sim = copy.deepcopy(get_cosine_sim(df_full))
 df_full["attributes_posted_date"] = pd.to_datetime(df_full["attributes_posted_date"])
 
 #### SIDE BAR STUFF --------------------------------------------------------------
-LOGO = "./img/logo.png"
+LOGO = "./img/aiports_logo.png"
 st.sidebar.image(LOGO, use_column_width=True)
 st.sidebar.text("Jason Lee\nSr. Data Scientist")
 
@@ -95,10 +136,15 @@ limit = st.sidebar.number_input(
     key="threshold",
 )
 
+
+grouped_df, cosine_sim_df, pointless_df, time_elapsed = group_similar_comments(
+    df_full, limit
+)
+
 st.sidebar.markdown(
     """
 
-**CART** is a tool for analyzing comments from the [Public Comments](https://www.regulations.gov/docket/VA-2020-VHA-0024/comments) form.
+**ACSA** is a tool for analyzing comments from the [Public Comments](https://www.regulations.gov/docket/VA-2020-VHA-0024/comments) form.
 """
 )
 
@@ -124,19 +170,16 @@ comment_period = (
 )
 # just the number of days
 comment_period = f"{comment_period.days} days"
+time_elapsed = f"{round(time_elapsed)} sec"
 
 
 # create several columns to display multiple metrics
 a1, a2, a3, a4, a5 = st.columns(5)
 a1.metric(label="Comments", value=len(df_full))
-a2.metric(label="Unique Comments", value=df_full["comment"].nunique())
+a2.metric(label="Unique Comments", value=grouped_df["Unique_Comment_ID"].nunique())
+a4.metric(label="Time to Calculate", value=time_elapsed)
 a3.metric(label="Comment Period", value=comment_period)
-a4.metric(label="Unique Jobs", value=df_full["job"].nunique())
-# average sentiment score
-a5.metric(
-    label="Average Sentiment Score",
-    value=np.round(df_full["sentiment_TEXTBLOB"].mean(), 2),
-)
+a5.metric(label="Similarity Threshold", value=limit)
 
 
 df_test = df
