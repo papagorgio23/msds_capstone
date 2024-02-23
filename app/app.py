@@ -12,13 +12,6 @@ import streamlit as st
 # this isn't needed
 
 
-def pretty(s: str) -> str:
-    try:
-        return dict(js="JavaScript")[s]
-    except KeyError:
-        return s.capitalize()
-
-
 ## NOT NONSENSE -------------------------------------
 st.set_page_config(
     page_title="CART",
@@ -158,8 +151,14 @@ st.markdown(
     """
 ### Summary of Regulation:  
 The VA is stating that its healthcare professionals can practice within VA guidelines, regardless of state requirements. This includes providing services in states where they aren't licensed, aiming to improve access to VA healthcare. The rule also emphasizes VA's authority to set national practice standards for uniformity across its medical facilities.
+"""
+)
 
 
+st.markdown("---")
+
+st.markdown(
+    """
 ### Comment Statistics:
 """
 )
@@ -173,12 +172,16 @@ comment_period = f"{comment_period.days} days"
 time_elapsed = f"{round(time_elapsed)} sec"
 
 
+perc_unique = (
+    f"{np.round(grouped_df['Unique_Comment_ID'].nunique() / len(df_full) * 100, 1)}%"
+)
+
 # create several columns to display multiple metrics
 a1, a2, a3, a4, a5 = st.columns(5)
 a1.metric(label="Comments", value=len(df_full))
 a2.metric(label="Unique Comments", value=grouped_df["Unique_Comment_ID"].nunique())
+a3.metric(label="Percent Unique", value=perc_unique)
 a4.metric(label="Time to Calculate", value=time_elapsed)
-a3.metric(label="Comment Period", value=comment_period)
 a5.metric(label="Similarity Threshold", value=limit)
 
 
