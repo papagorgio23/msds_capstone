@@ -6,18 +6,11 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import streamlit as st
 
-# from textblob import TextBlob
-
-# from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-# this isn't needed
-
-
-## NOT NONSENSE -------------------------------------
+# set the page config
 st.set_page_config(
     page_title="CART",
     page_icon=None,
     layout="centered",
-    # initial_sidebar_state="collapsed",
 )
 
 
@@ -30,10 +23,6 @@ def get_data():
 @st.cache_data
 def get_full_data():
     df = pd.read_csv("./data/df_full_wo_emotion.csv")
-    # df = pd.read_csv("./data/public_comments_133.csv")
-    # clean comments
-    # df["clean_comment"] = df["comment"].apply(nlp_clean)
-    # df["job"] = df["clean_comment"].apply(get_job)
     return df
 
 
