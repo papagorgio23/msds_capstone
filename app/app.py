@@ -180,14 +180,7 @@ import altair as alt
 st.markdown("---")
 
 
-# TEXT SIMILARITY
-# clean comments
-# df_full["clean_comment"] = df_full["comment"].apply(nlp_clean)
-# vectorizer = TfidfVectorizer()
-# tfidf_matrix = vectorizer.fit_transform(df_full["clean_comment"])
-# cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
-
-
+# TEXT SIMILARITY --------------------------------------------------------------
 sim_comments = get_similar_comments(
     index=number,
     df=df_full,
@@ -225,9 +218,6 @@ sim_comments = sim_comments.drop(
         "links_self",
         "comment",
         "sentiment_TEXTBLOB",
-        # "sentiment_VADER",
-        # "sentiment_FLAIR_label",
-        # "sentiment_FLAIR_score",
     ]
 )
 
