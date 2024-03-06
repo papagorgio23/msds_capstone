@@ -11,3 +11,25 @@ An example post is here: https://www.regulations.gov/comment/VA-2020-VHA-0024-91
 The list of all comments is found here: https://www.regulations.gov/docket/VA-2020-VHA-0024/comments
 
 There are 13,324 comments on this proposed regulation. 
+
+
+## To Run the Code
+
+1. Clone the repository
+2. Install the required packages
+3. Run the code
+4. Open the web application
+
+
+```bash
+git clone https://github.com/papagorgio23/msds_capstone.git
+cd msds_capstone
+```
+
+```bash
+pip install -r requirements.txt
+```
+
+```bash
+streamlit run app/app.py
+```
