@@ -7,8 +7,6 @@ import requests
 API_KEY_1 = os.environ.get("API_KEY_1")
 API_KEY_2 = os.environ.get("API_KEY_2")
 COMMENT_ID = os.environ.get("COMMENT_ID")
-COMMENT_ID = "0900006484959739"
-API_KEY_1 = "3sPejgjZSy2Syf3e7vCusmgMIeafgVhgaIt02Bmy"
 i = 1
 url = f"https://api.regulations.gov/v4/comments?filter[commentOnId]={COMMENT_ID}&page[size]=250&page[number]={i}&sort=lastModifiedDate,documentId&api_key={API_KEY_1}"
 
