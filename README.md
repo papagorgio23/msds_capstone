@@ -21,15 +21,34 @@ There are 13,324 comments on this proposed regulation.
 4. Open the web application
 
 
+
+This program was developed using [poetry](https://python-poetry.org/). After installing poetry by following their documentation, you will be able to reproduce this program on your computer with the following code (or you can do it the old fashioned way and install the packages manually):
+
+
+#### Clone the Repository:
+
 ```bash
 git clone https://github.com/papagorgio23/msds_capstone.git
 cd msds_capstone
 ```
 
-```bash
-pip install -r requirements.txt
+
+
+
+#### Prepare Enviornment:
+
+``` bash
+poetry shell
+poetry install
 ```
+
+
+#### Run Demo Application:
+
 
 ```bash
 streamlit run app/app.py
 ```
+
+
+
