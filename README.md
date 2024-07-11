@@ -52,3 +52,4 @@ streamlit run app/app.py
 
 
 
+Now I'm done with school forever! :)
