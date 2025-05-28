@@ -4,6 +4,7 @@ import os
 import re
 import requests
 
+# Get API Keys
 API_KEY_1 = os.environ.get("API_KEY_1")
 API_KEY_2 = os.environ.get("API_KEY_2")
 COMMENT_ID = os.environ.get("COMMENT_ID")
